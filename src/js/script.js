@@ -79,8 +79,9 @@
       const thisProduct = this;
 
       /* find the clickable trigger (the element that should react to clicking) */
-      const clickableTrigger = thisProduct.element.querySelectorAll(select.menuProduct.clickable);
+      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
       console.log('nagłówek do klikania' , clickableTrigger);
+      console.log(thisProduct.element);
       /* START: add event listener to clickable trigger on event click */
       clickableTrigger.addEventListener('click', function(event) {
         /* prevent default action for event */
