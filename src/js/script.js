@@ -80,19 +80,19 @@
 
       /* find the clickable trigger (the element that should react to clicking) */
       const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-      console.log('nagłówek do klikania' , clickableTrigger);
-      console.log(thisProduct.element);
+      console.log('thisproduct' , thisProduct.element);
       /* START: add event listener to clickable trigger on event click */
       clickableTrigger.addEventListener('click', function(event) {
         /* prevent default action for event */
         event.preventDefault();
         /* find active product (product that has active class) */
-        const activeProduct = document.querySelector(select.all.menuProductsActive);
-        console.log(activeProduct);
+        const activeProduct = document.querySelectorAll('article .product .active'); //select.all.menuProductsActive);
+        console.log('active product' , activeProduct);
         /* if there is active product and it's not thisProduct.element, remove class active from it */
-        if (activeProduct != null && activeProduct != thisProduct.element){
-          thisProduct.element.classList.remove('active');
-        }
+        for(let product of activeProduct){//(let i = 0; i < activeProduct.length; i++){
+        if(activeProduct != null && activeProduct != thisProduct.element){
+          product.classList.remove('active');
+        }};
         /* toggle active class on thisProduct.element */
         thisProduct.element.classList.toggle('active');
       });
