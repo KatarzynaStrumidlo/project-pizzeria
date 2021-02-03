@@ -138,22 +138,27 @@
       for(let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-        console.log(paramId, param);
+        console.log('to jest parametr produktu', paramId, param);
 
         // for every option in this category
         for(let optionId in param.options) {
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          console.log(optionId, option);
+          console.log('to jest opcja produktu', optionId, option);
+          console.log('opcja domyślna', option.default)
           //if(obj.sauce.includes('olives')) { console.log('Wybrano!'); }
 
-          /* jeśli jest zaznaczona opcja, która nie jest domyślna, cena produktu musi się zwiększyć o cenę tej opcji,
-            jeśli nie jest zaznaczona opcja, która jest domyślna, cena produktu musi się zmniejszyć o cenę tej opcji. */
-          /*jak sprawdzic czy opcja jest zaznaczona?
-          czy w obiekt formData zawiera właściwość o kluczu takim, jak klucz parametru (powinien, ale lepiej się upewnić), oraz
-          czy w tablicy zapisanej pod tym kluczem znajduje się klucz opcji (wspomniana wcześniej metoda (includes)).
-          Jeśli oba te warunki są prawdziwe, to znaczy, że opcja jest zaznaczona.
-          sprawdzić czy opcja jesy default i odpowiednio zmodyfikować cenę*/
+          /* check if option is picked */
+         if (formData[paramId] && formData[paramId].includes(optionId)){
+            if (!option.default) {
+              price = price + option.price;
+              console.log('cena z dodatkiem płatnym', price);
+            }else if (option.default){
+              console.log('cena bez dodatku domyślnego', price);
+              price = price - option.price;
+            }
+          };
+
 
         }
       }
