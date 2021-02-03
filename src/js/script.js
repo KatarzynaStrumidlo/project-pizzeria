@@ -59,7 +59,10 @@
       thisProduct.data = data;
 
       thisProduct.renderInMenu();
+      thisProduct.getElements();
       thisProduct.initAccordion();
+      thisProduct.initOrderForm();
+      thisProduct.processOrder();
 
       console.log('new Product:', thisProduct);
     }
@@ -75,28 +78,88 @@
       /* add element to menu */
       menuContainer.appendChild(thisProduct.element);
     }
-    initAccordion(){
+    getElements(){
       const thisProduct = this;
 
-      /* find the clickable trigger (the element that should react to clicking) */
-      const clickableTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-      console.log('thisproduct' , thisProduct.element);
+      thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
+      thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
+      thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
+      thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+    }
+    initAccordion(){
+      const thisProduct = this;
       /* START: add event listener to clickable trigger on event click */
-      clickableTrigger.addEventListener('click', function(event) {
+      thisProduct.accordionTrigger.addEventListener('click', function(event) {
         /* prevent default action for event */
         event.preventDefault();
         /* find active product (product that has active class) */
-        const activeProduct = document.querySelectorAll('article .product .active'); //select.all.menuProductsActive);
-        console.log('active product' , activeProduct);
+        const activeProduct = document.querySelectorAll(select.all.menuProductsActive);
         /* if there is active product and it's not thisProduct.element, remove class active from it */
-        for(let product of activeProduct){//(let i = 0; i < activeProduct.length; i++){
-        if(activeProduct != null && activeProduct != thisProduct.element){
-          product.classList.remove('active');
-        }};
+        for(let product of activeProduct){
+          if(activeProduct != null && activeProduct != thisProduct.element){
+            product.classList.remove('active');
+          }
+        }
         /* toggle active class on thisProduct.element */
         thisProduct.element.classList.toggle('active');
       });
+    }
+    initOrderForm(){
+      const thisProduct = this;
 
+      thisProduct.form.addEventListener('submit', function(event){
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
+
+      for(let input of thisProduct.formInputs){
+        input.addEventListener('change', function(){
+          thisProduct.processOrder();
+        });
+      }
+
+      thisProduct.cartButton.addEventListener('click', function(event){
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
+    }
+    processOrder() {
+      const thisProduct = this;
+
+      // covert form to object structure e.g. { sauce: ['tomato'], toppings: ['olives', 'redPeppers']}
+      const formData = utils.serializeFormToObject(thisProduct.form);
+      console.log('formData', formData);
+
+      // set price to default price
+      let price = thisProduct.data.price;
+
+      // for every category (param)...
+      for(let paramId in thisProduct.data.params) {
+        // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
+        const param = thisProduct.data.params[paramId];
+        console.log(paramId, param);
+
+        // for every option in this category
+        for(let optionId in param.options) {
+          // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
+          const option = param.options[optionId];
+          console.log(optionId, option);
+          //if(obj.sauce.includes('olives')) { console.log('Wybrano!'); }
+
+          /* jeśli jest zaznaczona opcja, która nie jest domyślna, cena produktu musi się zwiększyć o cenę tej opcji,
+            jeśli nie jest zaznaczona opcja, która jest domyślna, cena produktu musi się zmniejszyć o cenę tej opcji. */
+          /*jak sprawdzic czy opcja jest zaznaczona?
+          czy w obiekt formData zawiera właściwość o kluczu takim, jak klucz parametru (powinien, ale lepiej się upewnić), oraz
+          czy w tablicy zapisanej pod tym kluczem znajduje się klucz opcji (wspomniana wcześniej metoda (includes)).
+          Jeśli oba te warunki są prawdziwe, to znaczy, że opcja jest zaznaczona.
+          sprawdzić czy opcja jesy default i odpowiednio zmodyfikować cenę*/
+
+        }
+      }
+
+      // update calculated price in the HTML
+      thisProduct.priceElem.innerHTML = price;
     }
   }
 
