@@ -86,6 +86,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
     initAccordion(){
       const thisProduct = this;
@@ -145,11 +146,10 @@
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
           console.log('to jest opcja produktu', optionId, option);
-          console.log('opcja domyślna', option.default)
-          //if(obj.sauce.includes('olives')) { console.log('Wybrano!'); }
 
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
           /* check if option is picked */
-         if (formData[paramId] && formData[paramId].includes(optionId)){
+          if (optionSelected){
             if (!option.default) {
               price = price + option.price;
               console.log('cena z dodatkiem płatnym', price);
@@ -157,9 +157,17 @@
               console.log('cena bez dodatku domyślnego', price);
               price = price - option.price;
             }
-          };
-
-
+          }
+          console.log('wrapper obrazka', thisProduct.imageWrapper);
+          const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          console.log(optionImage);
+          if(optionImage) {
+            if(optionSelected) {
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            } else if (!optionSelected){
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
+            }
+          }
         }
       }
 
