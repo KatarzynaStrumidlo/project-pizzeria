@@ -40,7 +40,7 @@
     },
   };
 
-  const settings = {
+  const settings = { // eslint-disable-line no-unused-vars
     amountWidget: {
       defaultValue: 1,
       defaultMin: 1,
@@ -139,7 +139,7 @@
       for(let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-       //console.log('to jest parametr produktu', paramId, param);
+        //console.log('to jest parametr produktu', paramId, param);
 
         // for every option in this category
         for(let optionId in param.options) {
@@ -149,12 +149,10 @@
 
           const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
           /* check if option is picked */
-          if (optionSelected){
-            if (!option.default) {
-              price = price - option.price;
-            }else if (option.default){
-              price = price + option.price;
-            }
+          if (optionSelected && !option.default){
+            price = price + option.price;
+          } else if(!optionSelected && option.default) {
+            price = price - option.price;
           }
           const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
           if(optionImage) {
@@ -205,19 +203,18 @@
       thisWidget.input.value = thisWidget.value;
     }
     initActions(){
-      debugger;
       const thisWidget = this;
 
       thisWidget.input.addEventListener('change', function(){
-        setValue(thisWidget.value)
+        thisWidget.setValue(thisWidget.value);
       });
       thisWidget.linkDecrease.addEventListener('click', function(event){
         event.preventDefault();
-        setValue(--thisWidget.value);
+        thisWidget.setValue(--thisWidget.value);
       });
       thisWidget.linkIncrease.addEventListener('click', function(event){
         event.preventDefault();
-        setValue(++thisWidget.value);
+        thisWidget.setValue(++thisWidget.value);
       });
     }
   }
