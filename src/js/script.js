@@ -151,11 +151,11 @@
           /* check if option is picked */
           if (optionSelected){
             if (!option.default) {
-              price = price + option.price;
+              price = price - option.price;
               console.log('cena z dodatkiem płatnym', price);
             }else if (option.default){
               console.log('cena bez dodatku domyślnego', price);
-              price = price - option.price;
+              price = price + option.price;
             }
           }
           console.log('wrapper obrazka', thisProduct.imageWrapper);
