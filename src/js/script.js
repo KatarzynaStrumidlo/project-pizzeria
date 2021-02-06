@@ -92,6 +92,7 @@
 
       thisProduct.id = id;
       thisProduct.data = data;
+      console.log('this product',thisProduct);
 
       thisProduct.renderInMenu();
       thisProduct.getElements();
@@ -158,6 +159,7 @@
       thisProduct.cartButton.addEventListener('click', function(event){
         event.preventDefault();
         thisProduct.processOrder();
+        thisProduct.addToCart();
       });
     }
     processOrder() {
@@ -173,13 +175,13 @@
       for(let paramId in thisProduct.data.params) {
         // determine param value, e.g. paramId = 'toppings', param = { label: 'Toppings', type: 'checkboxes'... }
         const param = thisProduct.data.params[paramId];
-        //console.log('to jest parametr produktu', paramId, param);
+        console.log('to jest parametr produktu', paramId, param);
 
         // for every option in this category
         for(let optionId in param.options) {
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
-          //console.log('to jest opcja produktu', optionId, option);
+          console.log('to jest opcja produktu', optionId, option);
 
           const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
           /* check if option is picked */
@@ -198,6 +200,7 @@
           }
         }
       }
+      thisProduct.priceSingle = price;
       //multiply price by amount
       price *= thisProduct.amountWidget.value;
       // update calculated price in the HTML
@@ -210,7 +213,56 @@
         thisProduct.processOrder();
       });
     }
+    addToCart(){
+      const thisProduct = this;
+
+      app.cart.add(thisProduct.prepareCartProduct());
+    }
+    prepareCartProduct(){
+      const thisProduct = this;
+      const productSummary = {
+        id: thisProduct.id,
+        name: thisProduct.data.name,
+        amount: thisProduct.amountWidget.value,
+        priceSingle: thisProduct.priceSingle,
+        price: thisProduct.priceElem.innerHTML,
+        params: thisProduct.prepareCartProductParams()
+      };
+      return productSummary;
+    }
+    prepareCartProductParams() {
+      const thisProduct = this;
+
+      const formData = utils.serializeFormToObject(thisProduct.form);
+      const params = {};
+
+      // for very category (param)
+      for(let paramId in thisProduct.data.params) {
+        const param = thisProduct.data.params[paramId];
+
+        // create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}}
+        params[paramId] = {
+          name: param.label,
+          options: {}
+        };
+
+        // for every option in this category
+        for(let optionId in param.options) {
+          const option = param.options[optionId];
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+
+          if(optionSelected) {
+            // option is selected!
+            params[paramId].options = option.label;
+          }
+        }
+      }
+
+      return params;
+    }
+
   }
+
   class AmountWidget{
     constructor(element){
       const thisWidget = this;
@@ -244,7 +296,7 @@
     }
     initActions(){
       const thisWidget = this;
-
+      //debugger;
       thisWidget.input.addEventListener('change', function(){
         thisWidget.setValue(thisWidget.value);
       });
@@ -291,6 +343,11 @@
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
 
+    }
+    add(menuProduct){
+      //const thisCart = this;
+
+      console.log('adding product', menuProduct);
     }
   }
   const app = {
