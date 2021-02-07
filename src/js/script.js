@@ -242,7 +242,7 @@
 
         // create category param in params const eg. params = { ingredients: { name: 'Ingredients', options: {}}}
         params[paramId] = {
-          name: param.label,
+          label: param.label,
           options: {}
         };
 
@@ -253,7 +253,7 @@
 
           if(optionSelected) {
             // option is selected!
-            params[paramId].options = option.label;
+            params[paramId].options[optionId] = option.label;
           }
         }
       }
@@ -296,9 +296,9 @@
     }
     initActions(){
       const thisWidget = this;
-      //debugger;
       thisWidget.input.addEventListener('change', function(){
-        thisWidget.setValue(thisWidget.value);
+        //debugger;
+        thisWidget.setValue(thisWidget.input.value);
       });
       thisWidget.linkDecrease.addEventListener('click', function(event){
         event.preventDefault();
@@ -346,6 +346,7 @@
 
     }
     add(menuProduct){
+      //debugger;
       const thisCart = this;
 
       /* generate HTML based on template */
@@ -358,6 +359,8 @@
       cartContainer.appendChild(generatedDOM);
 
       console.log('adding product', menuProduct);
+      thisCart.products.push(menuProduct);
+      console.log('thisCart.products', thisCart.products);
     }
   }
   const app = {
