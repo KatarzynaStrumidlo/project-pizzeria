@@ -7,7 +7,7 @@ class DatePicker extends BaseWidget{
     super(wrapper, utils.dateToStr(new Date()));
     const thisWidget = this;
 
-    thisWidget.dom.input = thisWidget.dom.wrapper.querySelector(select.widgets.datePicker.input);
+    thisWidget.dom.input = thisWidget.dom.wrapper.querySelector(select.datePicker.input);
     thisWidget.initPlugin();
   }
   initPlugin(){

@@ -18,9 +18,9 @@ class Booking{
     thisBooking.dom.wrapper.innerHTML = generatedHTML;
     thisBooking.dom.peopleAmount = document.querySelector(select.booking.peopleAmount);
     thisBooking.dom.hoursAmount = document.querySelector(select.booking.hoursAmount);
-    thisBooking.dom.datePicker = document.querySelector(select.widgets.datePicker.wrapper);
+    thisBooking.dom.datePicker = document.querySelector(select.datePicker.wrapper);
     console.log(thisBooking.dom.datePicker);
-    thisBooking.dom.hourPicker = document.querySelector(select.widgets.hourPicker.wrapper);
+    thisBooking.dom.hourPicker = document.querySelector(select.hourPicker.wrapper);
 
   }
   initWidgets(){
