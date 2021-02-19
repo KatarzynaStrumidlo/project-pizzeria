@@ -12,7 +12,6 @@ class Booking {
     thisBooking.initWidgets();
     thisBooking.getData();
     thisBooking.reservationTable = null;
-    console.log('reservationTable', thisBooking.reservationTable);
 
   }
 
@@ -39,12 +38,12 @@ class Booking {
     };
 
     const urls = {
-      booking:              settings.db.url + '/' + settings.db.booking
-                                                              + '?' + params.booking.join('&'),
-      eventsCurrent:   settings.db.url + '/' + settings.db.event
-                                                              + '?' + params.eventsCurrent.join('&'),
-      eventsRepeat:    settings.db.url + '/' + settings.db.event
-                                                              + '?' + params.eventsRepeat.join('&'),
+      booking:       settings.db.url + '/' + settings.db.booking
+                                     + '?' + params.booking.join('&'),
+      eventsCurrent: settings.db.url + '/' + settings.db.event
+                                     + '?' + params.eventsCurrent.join('&'),
+      eventsRepeat:  settings.db.url + '/' + settings.db.event
+                                     + '?' + params.eventsRepeat.join('&'),
     };
 
     // console.log('getData urls', urls);
@@ -170,6 +169,10 @@ class Booking {
     thisBooking.dom.hourPicker = element.querySelector(select.widgets.hourPicker.wrapper);
     thisBooking.dom.tables = element.querySelectorAll(select.booking.tables);
     thisBooking.dom.parentTables = element.querySelector(select.booking.parentTables);
+    thisBooking.dom.form = element.querySelector(select.booking.form);
+    thisBooking.dom.phone = element.querySelector(select.booking.phone);
+    thisBooking.dom.address = element.querySelector(select.booking.address);
+    thisBooking.dom.starters = document.querySelectorAll(select.booking.starters);
   }
 
   initWidgets(){
@@ -189,17 +192,73 @@ class Booking {
     });
 
     thisBooking.dom.parentTables.addEventListener('click', function(){
-      //thisBooking.initTables();
+      thisBooking.initTables();
+    });
+
+    thisBooking.dom.form.addEventListener('submit', function(event){
+      event.preventDefault();
+      thisBooking.sendOrder();
     });
 
   }
 
-  //initTables(){
+  initTables(){
 
-  //const thisBooking = this;
+    const thisBooking = this;
 
+    const clickedElement = event.target;
+    const tableId = clickedElement.getAttribute('data-table');
 
-  // }
+    if(!clickedElement.classList.contains(classNames.booking.tableBooked)){
+      thisBooking.reservationTable = tableId;
+      console.log(thisBooking.reservationTable);
+    }else{
+      alert('Ten stolik jest zajęty');
+    }
+
+    for(let table of thisBooking.dom.tables){
+      table.classList.remove(classNames.booking.tableSelected);
+      if (clickedElement.classList.contains('table') && thisBooking.reservationTable == tableId){
+        clickedElement.classList.add(classNames.booking.tableSelected);
+        thisBooking.reservationTable = tableId;
+      }else{
+        thisBooking.reservationTable = null;
+        clickedElement.classList.remove(classNames.booking.tableSelected);
+      }
+    }
+    if(!clickedElement.classList.contains(classNames.booking.tableSelected)){
+      thisBooking.reservationTable = null;
+    }
+  }
+  sendOrder(){
+    const thisBooking = this;
+
+    const url = settings.db.url + '/' + settings.db.booking;
+    const payload = {};
+    payload.date = thisBooking.datePicker.value;
+    payload.hour = thisBooking.hourPicker.value;
+    payload.table = parseInt(thisBooking.reservationTable);
+    payload.duration = parseInt(thisBooking.peopleHoursWidget.value);
+    payload.ppl = parseInt(thisBooking.peopleAmountWidget.value);
+    payload.starters = [];
+    payload.phone = thisBooking.dom.phone.value;
+    payload.address = thisBooking.dom.address.value;
+
+    for(let starter of thisBooking.dom.starters){
+      if(starter.checked == true){
+        payload.starters.push(starter.value);
+      }
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+
+    fetch(url, options);
+  }
 }
-
 export default Booking;

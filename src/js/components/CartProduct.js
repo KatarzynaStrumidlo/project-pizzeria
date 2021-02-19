@@ -15,7 +15,7 @@ class CartProduct{
     thisCartProduct.getElements(element);
     thisCartProduct.initAmountWidget();
     thisCartProduct.initActions();
-    console.log('thisCartProduct:', thisCartProduct);
+    //console.log('thisCartProduct:', thisCartProduct);
   }
 
   getElements(element) {
