@@ -60,9 +60,9 @@ class Cart{
     /* add element to menu */
     cartContainer.appendChild(generatedDOM);
 
-    console.log('adding product', menuProduct);
+    //console.log('adding product', menuProduct);
     thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
-    console.log('thisCart.products', thisCart.products);
+    //console.log('thisCart.products', thisCart.products);
 
     thisCart.update();
   }
@@ -76,9 +76,9 @@ class Cart{
       thisCart.subTotalPrice = parseInt(thisCart.subTotalPrice) + parseInt(product.price);
     }
     thisCart.totalPrice = thisCart.subTotalPrice + thisCart.deliveryFee;
-    console.log('totalNumber', thisCart.totalNumber);
-    console.log('subtotalPrice', thisCart.subTotalPrice);
-    console.log('thisCart totalPrice', thisCart.totalPrice);
+    //console.log('totalNumber', thisCart.totalNumber);
+    // console.log('subtotalPrice', thisCart.subTotalPrice);
+    //console.log('thisCart totalPrice', thisCart.totalPrice);
     thisCart.dom.subTotalPrice.innerHTML = thisCart.subTotalPrice;
     thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
     if (thisCart.subTotalPrice > 0){
@@ -117,7 +117,7 @@ class Cart{
     for(let prod of thisCart.products) {
       payload.products.push(prod.getData());
     }
-    console.log('payload', payload);
+    //console.log('payload', payload);
     const options = {
       method: 'POST',
       headers: {

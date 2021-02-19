@@ -261,10 +261,9 @@
       "date": "2021-02-04",
       "hour": "16:00",
       "table": 1,
-      "repeat": false,
       "duration": 4,
       "ppl": 3,
-      "starters": []
+      "starters": ["water"]
     }
   ]
 }

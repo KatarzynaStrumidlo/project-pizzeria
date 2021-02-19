@@ -11,6 +11,7 @@ export const select = {
     cart: '#cart',
     pages: '#pages',
     booking: '.booking-wrapper',
+    home: '.home-wrapper',
   },
   all: {
     menuProducts: '#product-list > .product',
@@ -27,19 +28,19 @@ export const select = {
   },
   widgets: {
     amount: {
-      input: 'input.amount', // CODE CHANGED
+      input: 'input.amount',
       linkDecrease: 'a[href="#less"]',
       linkIncrease: 'a[href="#more"]',
     },
-  },
-  datePicker: {
-    wrapper: '.date-picker',
-    input: `input[name="date"]`,
-  },
-  hourPicker: {
-    wrapper: '.hour-picker',
-    input: 'input[type="range"]',
-    output: '.output',
+    datePicker: {
+      wrapper: '.date-picker',
+      input: `input[name="date"]`,
+    },
+    hourPicker: {
+      wrapper: '.hour-picker',
+      input: 'input[type="range"]',
+      output: '.output',
+    },
   },
   cart: {
     productList: '.cart__order-summary',
@@ -63,6 +64,7 @@ export const select = {
     peopleAmount: '.people-amount',
     hoursAmount: '.hours-amount',
     tables: '.floor-plan .table',
+    parentTables: '.floor-plan',
   },
   nav: {
     links: '.main-nav a',
@@ -96,8 +98,8 @@ export const settings = {
   },
   amountWidget: {
     defaultValue: 1,
-    defaultMin: 0,
-    defaultMax: 10,
+    defaultMin: 1,
+    defaultMax: 9,
   },
   datePicker: {
     maxDaysInFuture: 14,
@@ -109,7 +111,7 @@ export const settings = {
     tableIdAttribute: 'data-table',
   },
   db: {
-    url: '//localhost:3131',
+    url: '//' + window.location.hostname + (window.location.hostname=='localhost' ? ':3131' : ''),
     product: 'product',
     order: 'order',
     booking: 'booking',

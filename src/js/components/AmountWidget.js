@@ -1,17 +1,21 @@
-import {settings, select} from '/js/settings.js';
-import BaseWidget from '/js/components/BaseWidget.js';
+import {settings, select} from '../settings.js';
+import BaseWidget from './BaseWidget.js';
 
-class AmountWidget extends BaseWidget{
-  constructor(element){
+class AmountWidget extends BaseWidget {
+  constructor(element) {
     super(element, settings.amountWidget.defaultValue);
-
     const thisWidget = this;
-    thisWidget.getElements(element);
+    // console.log ('AmountWidget', thisWidget);
+    // console.log ('constructorarguments', element);
 
+    thisWidget.getElements(element);
     thisWidget.initActions();
-    //console.log('AmountWidget', thisWidget);
+
+    // console.log('AmountWidget:', thisWidget);
+    // console.log('constructor arguments', element);
+
   }
-  getElements(){
+  getElements () {
     const thisWidget = this;
 
     thisWidget.dom.input = thisWidget.dom.wrapper.querySelector(select.widgets.amount.input);
@@ -25,26 +29,27 @@ class AmountWidget extends BaseWidget{
     && value <= settings.amountWidget.defaultMax;
   }
 
-  renederValue(){
+  renderValue(){
     const thisWidget = this;
 
     thisWidget.dom.input.value = thisWidget.value;
   }
-
-  initActions(){
+  initActions () {
     const thisWidget = this;
-    thisWidget.dom.input.addEventListener('change', function(){
-      //debugger;
+
+    thisWidget.dom.input.addEventListener('change', function() {
       thisWidget.setValue(thisWidget.dom.input.value);
     });
-    thisWidget.dom.linkDecrease.addEventListener('click', function(event){
+    thisWidget.dom.linkDecrease.addEventListener('click', function (event) {
       event.preventDefault();
-      thisWidget.setValue(--thisWidget.value);
+      thisWidget.setValue(thisWidget.value - 1);
     });
-    thisWidget.dom.linkIncrease.addEventListener('click', function(event){
+    thisWidget.dom.linkIncrease.addEventListener('click', function (event) {
       event.preventDefault();
-      thisWidget.setValue(++thisWidget.value);
+      thisWidget.setValue(thisWidget.value + 1);
     });
   }
+
 }
+
 export default AmountWidget;
