@@ -221,7 +221,7 @@ class Booking {
       if (clickedElement.classList.contains('table') && thisBooking.reservationTable == tableId){
         clickedElement.classList.add(classNames.booking.tableSelected);
         thisBooking.reservationTable = tableId;
-      }else{
+      }else if(clickedElement.classList.contains('table') && thisBooking.reservationTable == tableId){
         thisBooking.reservationTable = null;
         clickedElement.classList.remove(classNames.booking.tableSelected);
       }
