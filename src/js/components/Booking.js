@@ -208,26 +208,27 @@ class Booking {
 
     const clickedElement = event.target;
     const tableId = clickedElement.getAttribute('data-table');
-
-    if(!clickedElement.classList.contains(classNames.booking.tableBooked)){
-      thisBooking.reservationTable = tableId;
-      console.log(thisBooking.reservationTable);
-    }else{
-      alert('Ten stolik jest zajęty');
-    }
-
-    for(let table of thisBooking.dom.tables){
-      table.classList.remove(classNames.booking.tableSelected);
-      if (clickedElement.classList.contains('table') && thisBooking.reservationTable == tableId){
-        clickedElement.classList.add(classNames.booking.tableSelected);
+    if (tableId) {
+      if(!clickedElement.classList.contains(classNames.booking.tableBooked)){
         thisBooking.reservationTable = tableId;
-      }else if(clickedElement.classList.contains('table') && thisBooking.reservationTable == tableId){
-        thisBooking.reservationTable = null;
-        clickedElement.classList.remove(classNames.booking.tableSelected);
+        console.log(thisBooking.reservationTable);
+      }else{
+        alert('Ten stolik jest zajęty');
       }
-    }
-    if(!clickedElement.classList.contains(classNames.booking.tableSelected)){
-      thisBooking.reservationTable = null;
+
+      for(let table of thisBooking.dom.tables){
+        table.classList.remove(classNames.booking.tableSelected);
+        if (clickedElement.classList.contains('table') && thisBooking.reservationTable == tableId){
+          clickedElement.classList.add(classNames.booking.tableSelected);
+          thisBooking.reservationTable = tableId;
+        }else{
+          thisBooking.reservationTable = null;
+          clickedElement.classList.remove(classNames.booking.tableSelected);
+        }
+      }
+      if(!clickedElement.classList.contains(classNames.booking.tableSelected)){
+        thisBooking.reservationTable = null;
+      }
     }
   }
   sendOrder(){
